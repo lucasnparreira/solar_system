@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planetas do Sistema Solar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+</head>
+<body>
+    <h3>Planetas do Sistema Solar</h3>
+    <div class="container">
+        {% for planeta in planetas %}
+            <div class="planet-card" onclick="openModal('{{ planeta['image'] }}', '{{ planeta['englishName'] }}')">
+                <img src="{{ planeta['image'] }}" alt="{{ planeta['englishName'] }}" class="planet-image">
+                <h4>{{ planeta['englishName'] }}</h4>
+                <ul>
+                    <li><strong>Diametro:</strong> {{ planeta['meanRadius'] * 2 }}</li>
+                    <li><strong>Massa:</strong> {{ planeta['mass']['massValue'] }}</li>
+                    <li><strong>Gravidade:</strong> {{ planeta['gravity'] }} m/s²</li>
+                    <li><strong>Periodo de rotação:</strong> {{ planeta['sideralRotation'] }} horas</li>
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div id="modal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modal-img">
+        <div id="caption"></div>
+    </div>
+    
+</body>
+<script>
+    function openModal(imageUrl, planetName) {
+        var modal = document.getElementById("modal");
+        var modalImg = document.getElementById("modal-img");
+        var captionText = document.getElementById("caption");
+
+        modal.style.display = "block";
+        modalImg.src = imageUrl;
+        captionText.innerHTML = planetName;
+    }
+
+    function closeModal(){
+        var modal = document.getElementById("modal");
+        modal.style.display = "none";
+    }
+
+    window.click = function(event) {
+        var modal = document.getElementById("modal");
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+</script>
+</html>
