@@ -9,7 +9,10 @@
 </head>
 <body>
     <h3>Planetas do Sistema Solar</h3>
-    <div class="container">
+    <div class="search-container">
+        <input type="text" id="search" onkeyup="filterPlanets()" placeholder="Buscar planeta...">
+    </div>
+    <div id="planet-cards" class="container">
         {% for planeta in planetas %}
             <div class="planet-card" onclick="openModal('{{ planeta['image'] }}', '{{ planeta['englishName'] }}')">
                 <img src="{{ planeta['image'] }}" alt="{{ planeta['englishName'] }}" class="planet-image">
@@ -24,12 +27,12 @@
         {% endfor %}
     </div>
 
-    <div id="modal" class="modal">
+    <div id="modal" class="modal" onclick="closeModalOnClick(event)">
         <span class="close" onclick="closeModal()">&times;</span>
         <img class="modal-content" id="modal-img">
         <div id="caption"></div>
     </div>
-    
+
 </body>
 <script>
     function openModal(imageUrl, planetName) {
@@ -47,10 +50,34 @@
         modal.style.display = "none";
     }
 
+    function closeModalOnClick(event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    }
+
     window.click = function(event) {
         var modal = document.getElementById("modal");
         if (event.target === modal) {
             closeModal();
+        }
+    }
+
+    function filterPlanets(){
+        var input, filter, cards, cardContainer, h4, i, txtValue;
+        input = document.getElementById('search');
+        filter = input.value.toUpperCase();
+        cardContainer = document.getElementById('planet-cards');
+        cards = cardContainer.getElementsByClassName('planet-card');
+
+        for (i=0; i < cards.length; i++) {
+            h4 = cards[i].getElementsByTagName('h4')[0];
+            txtValue = h4.textContent || h4.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                cards[i].style.display = "";
+            } else {
+                cards[i].style.display = "none";
+            }
         }
     }
 </script>
