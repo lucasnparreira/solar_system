@@ -1,4 +1,6 @@
 body {
+    background: url('https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg') no-repeat center center fixed;
+    background-size: cover;
     font-family: Arial, sans-serif;
     background-color: #f0f0f5;
     margin: 0;
@@ -7,8 +9,9 @@ body {
 
 h3, .search-container {
     text-align: center;
-    color: #333;
+    color: white;
     margin-top: 20px;
+    border-radius: 8px;
 }
 
 .container {
@@ -57,6 +60,30 @@ h3, .search-container {
 
 .planet-card strong {
     color: #555;
+}
+
+.favorite-button {
+    padding: 10px 15px;
+    margin-top: 10px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff; /* Azul padrão para o botão */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.favorite-button:hover {
+    background-color: #0056b3; /* Azul escuro ao passar o mouse */
+}
+
+.favorite-button.favorited {
+    background-color: #28a745; /* Verde quando favoritado */
+}
+
+.favorite-button.favorited:hover {
+    background-color: #218838; /* Verde escuro ao passar o mouse quando favoritado */
 }
 
 /*modal*/

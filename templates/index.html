@@ -14,8 +14,8 @@
     </div>
     <div id="planet-cards" class="container">
         {% for planeta in planetas %}
-            <div class="planet-card" onclick="openModal('{{ planeta['image'] }}', '{{ planeta['englishName'] }}')">
-                <img src="{{ planeta['image'] }}" alt="{{ planeta['englishName'] }}" class="planet-image">
+            <div class="planet-card">
+                <img src="{{ planeta['image'] }}" alt="{{ planeta['englishName'] }}" class="planet-image" onclick="openModal('{{ planeta['image'] }}', '{{ planeta['englishName'] }}')">
                 <h4>{{ planeta['englishName'] }}</h4>
                 <ul>
                     <li><strong>Diametro:</strong> {{ planeta['meanRadius'] * 2 }}</li>
@@ -23,6 +23,7 @@
                     <li><strong>Gravidade:</strong> {{ planeta['gravity'] }} m/s²</li>
                     <li><strong>Periodo de rotação:</strong> {{ planeta['sideralRotation'] }} horas</li>
                 </ul>
+                <button class="favorite-button" onclick="toggleFavorite(event, '{{ planeta['englishName'] }}')">Favoritar</button>
             </div>
         {% endfor %}
     </div>
@@ -43,6 +44,11 @@
         modal.style.display = "block";
         modalImg.src = imageUrl;
         captionText.innerHTML = planetName;
+
+        document.body.style.backgroundImage = `url(${imageUrl})`;
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundRepeat = "no-repeat";
+        document.body.style.backgroundPosition = "center";
     }
 
     function closeModal(){
@@ -80,5 +86,44 @@
             }
         }
     }
+
+    function toggleFavorite(event, planetName) {
+        event.stopPropagation(); // Impede a propagação do clique para o card
+
+        var favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+        var index = favorites.indexOf(planetName);
+        if (index > -1) {
+            favorites.splice(index, 1);
+        } else {
+            favorites.push(planetName);
+        }
+
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+
+        updateFavoriteButtons();
+    }
+
+function updateFavoriteButtons() {
+    var favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    var cards = document.getElementsByClassName('planet-card');
+
+    for (var i = 0; i < cards.length; i++) {
+        var planetName = cards[i].getElementsByTagName('h4')[0].innerText;
+        var favoriteButton = cards[i].getElementsByClassName('favorite-button')[0];
+
+        if (favorites.indexOf(planetName) > -1) {
+            favoriteButton.innerText = "Desfavoritar";
+            favoriteButton.classList.add("favorited");
+        } else {
+            favoriteButton.innerText = "Favoritar";
+            favoriteButton.classList.remove("favorited");
+        }
+    }
+}
+    window.onload = function() {
+        updateFavoriteButtons();
+    }
+
 </script>
 </html>
